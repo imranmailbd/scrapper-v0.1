@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<% var config = htmlWebpackPlugin || SSRData %>
+<!--[if lt IE 7 ]> <html lang="en" class="ie6" <% if(config.files.manifest) { %> manifest="<%= config.files.manifest %>"<% } %>> <![endif]-->
+<!--[if IE 7 ]>    <html lang="en" class="ie7" <% if(config.files.manifest) { %> manifest="<%= config.files.manifest %>"<% } %>> <![endif]-->
+<!--[if IE 8 ]>    <html lang="en" class="ie8" <% if(config.files.manifest) { %> manifest="<%= config.files.manifest %>"<% } %>> <![endif]-->
+<!--[if IE 9 ]>    <html lang="en" class="ie9" <% if(config.files.manifest) { %> manifest="<%= config.files.manifest %>"<% } %>> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html lang="en" class="" <% if(config.files.manifest) { %> manifest="<%= config.files.manifest %>"<% } %>> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title><%= config.options.title || 'Marketbeat.com'%></title>
+
+  <% if (config.files.favicon) { %>
+  <link rel="shortcut icon" href="<%= config.files.favicon%>">
+  <% } %>
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0, minimal-ui">
+
+  <% for (var css in config.files.css) { %>
+  <link href="<%= config.files.css[css] %>" rel="preload" as="style">
+  <link href="<%= config.files.css[css] %>" rel="stylesheet">
+  <% } %>
+  
+  <% if (config.options.chunks) { %>
+    <%= config.options.chunks.css %>
+  <% } %>
+
+  <!-- Loader Style -->
+  <style>
+    @keyframes spin {
+      100% {
+        transform: rotate(360deg)
+      }
+    }
+    .initial-loader-wrap {
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: -apple-system, "Helvetica Neue", Helvetica, "Segoe UI", Arial, sans-serif;
+      font-size: 12px;
+      position: fixed;
+      z-index: 99999;
+      background-color: white;
+      transition: opacity 200ms cubic-bezier(0.215, 0.610, 0.355, 1.000);
+    }
+    .loaded .initial-loader-wrap {
+      opacity: 0;
+    }
+    .initial-loader {
+      min-width: 240px;
+      color: #212529;
+      line-height: 1.5;
+    }
+    .initial-loader__row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem;
+    }
+    .initial-loader__row + .initial-loader__row {
+      border-top: 1px solid #e2e2e2;
+    }
+    .initial-loader h1 {
+      margin: 0;
+      color: #0D7BFF;
+      font-size: 30px;
+      font-weight: 600;
+      line-height: 1.2;
+    }
+    .initial-loader svg#loader-circle {
+      transform-origin: 50% 50%;
+	    animation: spin .5s linear infinite;
+    }
+
+
+
+
+/*Upload Box Start*/
+.box {
+  background-color: #dfc8ca;
+  padding: 6.25rem 1.25rem;
+  text-align: center;
+}
+
+.js,
+.inputfile {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+}
+
+.inputfile + label {
+  max-width: 80%;
+  font-size: 1.25rem;
+  /* 20px */
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+  display: inline-block;
+  overflow: hidden;
+  padding: 0.625rem 1.25rem;
+  /* 10px 20px */
+}
+
+.no-js .inputfile + label {
+  display: none;
+}
+
+.inputfile:focus + label,
+.inputfile.has-focus + label {
+  outline: 1px dotted #000;
+  outline: -webkit-focus-ring-color auto 5px;
+}
+
+.inputfile + label * {
+  /* pointer-events: none; */
+  /* in case of FastClick lib use */
+}
+
+.inputfile + label svg {
+  width: 1em;
+  height: 1em;
+  vertical-align: middle;
+  fill: currentColor;
+  margin-top: -0.25em;
+  /* 4px */
+  margin-right: 0.25em;
+  /* 4px */
+}
+
+/* style 1 */
+
+.inputfile-1 + label {
+  color: #f1e5e6;
+  background-color: #d3394c;
+}
+
+.inputfile-1:focus + label,
+.inputfile-1.has-focus + label,
+.inputfile-1 + label:hover {
+  background-color: #722040;
+}
+
+/* style 2 */
+
+.inputfile-2 + label {
+  color: #d3394c;
+  border: 2px solid currentColor;
+}
+
+.inputfile-2:focus + label,
+.inputfile-2.has-focus + label,
+.inputfile-2 + label:hover {
+  color: #722040;
+}
+
+/* style 3 */
+
+.inputfile-3 + label {
+  color: #d3394c;
+}
+
+.inputfile-3:focus + label,
+.inputfile-3.has-focus + label,
+.inputfile-3 + label:hover {
+  color: #722040;
+}
+
+/* style 4 */
+
+.inputfile-4 + label {
+  color: #d3394c;
+}
+
+.inputfile-4:focus + label,
+.inputfile-4.has-focus + label,
+.inputfile-4 + label:hover {
+  color: #722040;
+}
+
+.inputfile-4 + label figure {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: #d3394c;
+  display: block;
+  padding: 20px;
+  margin: 0 auto 10px;
+}
+
+.inputfile-4:focus + label figure,
+.inputfile-4.has-focus + label figure,
+.inputfile-4 + label:hover figure {
+  background-color: #722040;
+}
+
+.inputfile-4 + label svg {
+  width: 100%;
+  height: 100%;
+  fill: #f1e5e6;
+}
+
+/* style 5 */
+
+.inputfile-5 + label {
+  color: #d3394c;
+}
+
+.inputfile-5:focus + label,
+.inputfile-5.has-focus + label,
+.inputfile-5 + label:hover {
+  color: #722040;
+}
+
+.inputfile-5 + label figure {
+  width: 100px;
+  height: 135px;
+  background-color: #d3394c;
+  display: block;
+  position: relative;
+  padding: 30px;
+  margin: 0 auto 10px;
+}
+
+.inputfile-5:focus + label figure,
+.inputfile-5.has-focus + label figure,
+.inputfile-5 + label:hover figure {
+  background-color: #722040;
+}
+
+.inputfile-5 + label figure::before,
+.inputfile-5 + label figure::after {
+  width: 0;
+  height: 0;
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.inputfile-5 + label figure::before {
+  border-top: 20px solid #dfc8ca;
+  border-left: 20px solid transparent;
+}
+
+.inputfile-5 + label figure::after {
+  border-bottom: 20px solid #722040;
+  border-right: 20px solid transparent;
+}
+
+.inputfile-5:focus + label figure::after,
+.inputfile-5.has-focus + label figure::after,
+.inputfile-5 + label:hover figure::after {
+  border-bottom-color: #d3394c;
+}
+
+.inputfile-5 + label svg {
+  width: 100%;
+  height: 100%;
+  fill: #f1e5e6;
+}
+
+/* style 6 */
+
+.inputfile-6 + label {
+  color: #d3394c;
+}
+
+.inputfile-6 + label {
+  border: 1px solid #d3394c;
+  background-color: #f1e5e6;
+  padding: 0;
+}
+
+.inputfile-6:focus + label,
+.inputfile-6.has-focus + label,
+.inputfile-6 + label:hover {
+  border-color: #722040;
+}
+
+.inputfile-6 + label span,
+.inputfile-6 + label strong {
+  padding: 0.625rem 1.25rem;
+  /* 10px 20px */
+}
+
+.inputfile-6 + label span {
+  width: 200px;
+  min-height: 2em;
+  display: inline-block;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  vertical-align: top;
+}
+
+.inputfile-6 + label strong {
+  height: 100%;
+  color: #f1e5e6;
+  background-color: #d3394c;
+  display: inline-block;
+}
+
+.inputfile-6:focus + label strong,
+.inputfile-6.has-focus + label strong,
+.inputfile-6 + label:hover strong {
+  background-color: #722040;
+}
+
+@media screen and (max-width: 50em) {
+  .inputfile-6 + label strong {
+    display: block;
+  }
+}
+
+button.submit {
+  display: block;
+  margin: auto;
+  padding: 10px 20px;
+  background-color: #d3394c;
+  color: #ffffff;
+  border: none;
+  font-size: 30px;
+  font-weight: bold;
+}
+button.submit:hover {
+  cursor: pointer;
+}
+/*Upload Box End*/
+
+
+
+  </style>
+</head>
+<body>
+  <!-- START Loader -->
+  <div class="initial-loader-wrap">
+    <div class="initial-loader">
+      <div class="initial-loader__row">
+        
+
+
+        <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 810.65 206"><defs><style>.cls-1{fill:#000000;}</style></defs><title>MarketBeat-logo-r-white</title><path class="cls-1" d="M224.43,83.22c-12.08,0-19.75,2.28-27.57,5.77l5,15.59c6.5-2.42,11.93-3.9,19.61-3.9,10.08,0,15.26,4.7,15.26,13.15V115a50.13,50.13,0,0,0-17.36-3c-16.85,0-28.63,7.25-28.63,23v.26c0,14.25,11,22,24.38,22,9.81,0,16.56-3.62,21.48-9.1V156h19.52V114.26c0-9.67-2.37-17.61-7.69-23C243.39,86.16,235.44,83.22,224.43,83.22Zm12.62,47.43c0,7.39-6.36,12.62-15.78,12.62-6.48,0-11-3.22-11-8.73v-.27c0-6.44,5.29-9.94,13.91-9.94A31.07,31.07,0,0,1,237.05,127Z" transform="translate(-1 -0.93)"/><path class="cls-1" d="M287.81,98.54V84H267.67v72h20.14V129.43c0-17.19,8.22-25.39,21.63-25.39h1V82.67C298.56,82.14,291.94,88.58,287.81,98.54Z" transform="translate(-1 -0.93)"/><polygon class="cls-1" points="384.12 83.09 360.01 83.09 336.4 109.3 336.4 57.03 316.25 57.03 316.25 155.09 336.4 155.09 336.4 133.21 343.44 125.68 362 155.09 385.06 155.09 357.09 111.44 384.12 83.09"/><path class="cls-1" d="M418.31,82.67c-20.69,0-35.14,17-35.14,37.5v.26c0,22,15.78,37.21,37.11,37.21,12.87,0,22.41-5.11,29-13.42l-11.53-10.36c-5.57,5.24-10.47,7.4-17.24,7.4-9,0-15.37-4.85-17.35-14.11h49.43c.12-1.87.26-3.75.26-5.37C452.9,101.36,442,82.67,418.31,82.67Zm-15.4,31.71c1.6-9.27,7-15.31,15.4-15.31s13.77,6.18,15,15.31Z" transform="translate(-1 -0.93)"/><path class="cls-1" d="M485.55,65.62H465.38V84H456.9v17.46h8.48v34.13c0,16.65,8.34,21.64,20.68,21.64A29.45,29.45,0,0,0,502,153.08v-16.4a20.05,20.05,0,0,1-10,2.56c-4.5,0-6.5-2.29-6.5-7V101.48h16.75V84H485.55Z" transform="translate(-1 -0.93)"/><path class="cls-1" d="M574.87,103.31c6.64-4,12.22-10.37,12.22-21.72v-.24a24.26,24.26,0,0,0-6.37-17.19c-5.35-5.72-13.66-8.89-24.31-8.89h-43V155.93h44.14c21,0,34.73-9.2,34.73-27.61V128C592.25,114.54,585.62,107.77,574.87,103.31ZM533.26,74.68h20.16c8.62,0,13.39,3.75,13.39,10.36v.29c0,7.49-5.71,10.64-14.72,10.64H533.26ZM572,125.59c0,7.48-5.44,10.94-14.45,10.94H533.26V114.37h23.59c10.48,0,15.12,4.18,15.12,10.93Z" transform="translate(-1 -0.93)"/><path class="cls-1" d="M632.84,82.67c-20.68,0-35.12,17-35.12,37.5v.26c0,22,15.76,37.21,37.1,37.21,12.86,0,22.41-5.11,29-13.42l-11.52-10.36c-5.57,5.24-10.48,7.4-17.23,7.4-9,0-15.39-4.85-17.37-14.11h49.46c.13-1.87.25-3.75.25-5.37C667.43,101.36,656.57,82.67,632.84,82.67Zm-15.38,31.71c1.59-9.27,7-15.31,15.38-15.31s13.79,6.18,15,15.31Z" transform="translate(-1 -0.93)"/><path class="cls-1" d="M706,83.22c-12.07,0-19.76,2.28-27.58,5.77l5,15.59c6.51-2.42,12-3.9,19.65-3.9,10.06,0,15.23,4.7,15.23,13.15V115a50.13,50.13,0,0,0-17.36-3c-16.84,0-28.63,7.25-28.63,23v.26c0,14.25,11,22,24.4,22,9.8,0,16.55-3.62,21.46-9.1V156h19.48V114.26c0-9.67-2.38-17.61-7.67-23C725,86.16,717,83.22,706,83.22Zm12.58,47.43c0,7.39-6.34,12.62-15.76,12.62-6.51,0-11-3.22-11-8.73v-.27c0-6.44,5.29-9.94,13.91-9.94A31,31,0,0,1,718.64,127Z" transform="translate(-1 -0.93)"/><path class="cls-1" d="M788.78,101.48V84H772.07V65.62H751.93V84h-8.48v17.46h8.48v34.13c0,16.65,8.35,21.64,20.68,21.64a29.58,29.58,0,0,0,15.91-4.17v-16.4a20.05,20.05,0,0,1-10,2.56c-4.52,0-6.51-2.29-6.51-7V101.48Z" transform="translate(-1 -0.93)"/><path class="cls-1" d="M803.1,85.9a8.48,8.48,0,0,1-3.41-.65,8.17,8.17,0,0,1-2.7-1.79,7.9,7.9,0,0,1-1.8-2.69,9.22,9.22,0,0,1,0-6.75,7.86,7.86,0,0,1,1.8-2.68,8.14,8.14,0,0,1,2.7-1.78,9.21,9.21,0,0,1,6.81,0A8.17,8.17,0,0,1,811,74a8.78,8.78,0,0,1,.65,3.36,8.89,8.89,0,0,1-.65,3.39,8.21,8.21,0,0,1-4.5,4.48A8.79,8.79,0,0,1,803.1,85.9Zm0-.76a8.1,8.1,0,0,0,3-.55A7.75,7.75,0,0,0,808.55,83a7.39,7.39,0,0,0,1.64-2.44,8.32,8.32,0,0,0,.59-3.16,7.87,7.87,0,0,0-.58-3,7.45,7.45,0,0,0-4.05-4.05,8.49,8.49,0,0,0-6.17,0,7.36,7.36,0,0,0-4,4.06,8.42,8.42,0,0,0,0,6.13,7.78,7.78,0,0,0,1.6,2.47A7.41,7.41,0,0,0,800,84.61,8,8,0,0,0,803.1,85.14Zm-3.55-13.06H804a2.75,2.75,0,0,1,1.26.3,3.43,3.43,0,0,1,1,.78,3.92,3.92,0,0,1,.67,1.11,3.59,3.59,0,0,1,.22,1.21,3.5,3.5,0,0,1-.65,2,2.78,2.78,0,0,1-1.74,1.11l2.58,4.12H806l-2.47-4H800.8v4h-1.23ZM804,77.71a1.65,1.65,0,0,0,1.44-.65,2.56,2.56,0,0,0,.49-1.61,2.33,2.33,0,0,0-.57-1.61,1.87,1.87,0,0,0-1.43-.58H800.8v4.45Z" transform="translate(-1 -0.93)"/><path class="cls-1" d="M179.6,138.06H160L146,.93h-18.2L95,154.67l-19-124.36H57.76l-22.24,84H12.88L1,132.84H43.45a8.29,8.29,0,0,0,8-6.53c1.58-6,13.08-49.92,13.08-49.92L84.42,206.93h18.09l31.2-146.2s8.45,85.17,8.82,87.94,2.81,7.94,8.41,7.94h40.55Z" transform="translate(-1 -0.93)"/></svg>
+  
+        <svg
+            version="1.1"
+            id="loader-circle"
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+            width="30px" height="30px" viewBox="0 0 40 40" enable-background="new 0 0 40 40" xml:space="preserve"
+        >
+            <g>
+                <path
+                    fill="#e7e7e7"
+                    d="M20.201,5.169c-8.254,0-14.946,6.692-14.946,14.946c0,8.255,6.692,14.946,14.946,14.946s14.946-6.691,14.946-14.946C35.146,11.861,28.455,5.169,20.201,5.169z M20.201,31.749c-6.425,0-11.634-5.208-11.634-11.634c0-6.425,5.209-11.634,11.634-11.634c6.425,0,11.633,5.209,11.633,11.634C31.834,26.541,26.626,31.749,20.201,31.749z"
+                />
+                <path
+                    fill="#1EB7FF"
+                    d="M26.013,10.047l1.654-2.866c-2.198-1.272-4.743-2.012-7.466-2.012h0v3.312h0C22.32,8.481,24.301,9.057,26.013,10.047z"
+                >
+                </path>
+            </g>
+        </svg>
+      </div>
+      <div class="initial-loader__row">
+        Please Wait. Loading...
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+        var bodyElement = document.querySelector('body');
+        bodyElement.classList.add('loading');
+
+        document.addEventListener('readystatechange', function() {
+            if(document.readyState === 'complete') {
+                var bodyElement = document.querySelector('body');
+                var loaderElement = document.querySelector('.initial-loader-wrap');
+                bodyElement.classList.add('loaded');
+                setTimeout(function() {
+                    bodyElement.removeChild(loaderElement);
+                    bodyElement.classList.remove('loading', 'loaded');
+                }, 200);
+            }
+        });
+    })();
+  </script>
+  <!-- END Loader -->
+
+  <div id="root"><%= config.innerHtml || '' %></div>
+
+  <% for (var chunk in config.files.chunks) { %>
+  <script src="<%= config.files.chunks[chunk].entry %>" defer></script>
+  <% } %>
+
+  <% if (config.options.devServer) { %>
+  <script src="<%= config.options.devServer%>/webpack-dev-server.js"></script>
+  <% } %>
+</body>
+</html>
