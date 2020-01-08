@@ -77,7 +77,7 @@ export class AdvancedTableA extends React.Component {
             
 
              //console.log(_.times(INITIAL_PRODUCTS_COUNT, generateRow));
-        axios.get('http://127.0.0.1:3005')
+        axios.get('http://127.0.0.1:3005/api/scrapedData')
               .then(res => {
                 const persons = res.data;
                 this.setState({ persons });
@@ -170,47 +170,9 @@ export class AdvancedTableA extends React.Component {
             })
         }, {
             dataField: 'company_name',
-            text: 'Company Name',
-            formatter: (cell) => {
-                let pqProps;
-                switch (cell) {
-                    case ProductQuality.Good:
-                        pqProps = {
-                            color: 'success',
-                            text: 'Good'
-                        }
-                    break;
-                    case ProductQuality.Bad:
-                        pqProps = {
-                            color: 'danger',
-                            text: 'Bad'
-                        }
-                    break;
-                    case ProductQuality.Unknown:
-                    default:
-                        pqProps = {
-                            color: 'secondary',
-                            text: 'Unknown'
-                        }
-                }
-
-                return (
-                    <Badge color={pqProps.color}>
-                        { pqProps.text }
-                    </Badge>
-                )
-            },
+            text: 'Company Name',            
             sort: true,
-            sortCaret,
-            ...buildCustomSelectFilter({
-                placeholder: 'Select Quality',
-                options: [
-                    { value: ProductQuality.Good, label: 'Good' },
-                    { value: ProductQuality.Bad, label: 'Bad' },
-                    { value: ProductQuality.Unknown, label: 'Unknown' }
-                ],
-                getFilter: filter => { this.qualityFilter = filter; }
-            })
+            sortCaret
         }, {
             dataField: 'pricetarget',
             text: 'Price Target',
@@ -224,14 +186,7 @@ export class AdvancedTableA extends React.Component {
             dataField: 'title',
             text: 'Title',
             sort: true,
-            sortCaret,
-            formatter: (cell) =>
-                <StarRating at={ cell } max={ 6 } />,
-            ...buildCustomSelectFilter({
-                placeholder: 'Select Satisfaction',
-                options: _.times(6, (i) => ({ value: i + 1, label: i + 1 })),
-                getFilter: filter => { this.satisfactionFilter = filter; }
-            })
+            sortCaret
         }, {
             dataField: 'created_at',
             text: 'Created',

@@ -18,8 +18,9 @@ constructor(props) {
         super(props)
         this.state = {
           data: [],
-          totalInsert: "Nothing till inserted...",
-          totalDuplicate:'N/A'
+          scrapStateMsg: "Scraping not initialize...",
+          scrapStateDoneMsg:'Click on Start button to initialize/start scrapping',
+          loading: false
         }
 }
 
@@ -63,47 +64,77 @@ constructor(props) {
 // }
 
 
+ 
 
 
-// handleInsert(e) {
+handleScrapping(e) {
     
-//     //console.log(data);
+    //console.log(data);
+    //alert('data');
     
 
-//     //if(event.target.elements.form_flag.value === "csv_paeameter_upload"){
-//     const stock_param_data_csv = this.state.data;
+    //if(event.target.elements.form_flag.value === "csv_paeameter_upload"){
+    //const stock_param_data_csv = this.state.data;
 
-//     axios.post('http://127.0.0.1:3005/api/stockParameterInsertCsv', stock_param_data_csv)
-//     .then(res => {           
-//     //this.setState({ stock_param_data_csv });
-//     //console.log(res);
-//     //console.log(res.data.affectedRows);
-//     //console.log(res.data.warningCount);
-//     //this.setState({ message: "Total Inserted: "+res.data.affectedRows+" & Duplicate: "+res.data.warningCount });
-//     this.setState({ totalInsert:res.data.affectedRows  });
-//     this.setState({ totalDuplicate:res.data.warningCount  });
-//     //swal("Inserted: "+res.data.affectedRows+"& Duplicate:"+res.data.warningCount);
-
-//     swal({
-//       icon: 'success',
-//       title: '!',
-//       text: 'Successfully Uploaded!',
-//       footer: '<a href>Go here to see uploaded data</a>'
-//     })
-
-//     // affectedRows - Insert
-//     // warningCount - Duplicate
-//     // changedRows
-
-//     });
-//     //window.location = 'http://127.0.0.1:4100/tables/stock-market'; 
-
-//     event.preventDefault();
-//     //}
-//     //########  Stock Parameter Add Form End  ##########
+    // axios.post('http://127.0.0.1:3005/scraper', stock_param_data_csv)
+    // .then(res => {           
+    // //this.setState({ stock_param_data_csv });
+    // //console.log(res);
+    // //console.log(res.data.affectedRows);
+    // //console.log(res.data.warningCount);
+    // //this.setState({ message: "Total Inserted: "+res.data.affectedRows+" & Duplicate: "+res.data.warningCount });
+    // this.setState({ totalInsert:res.data.affectedRows  });
+    // this.setState({ totalDuplicate:res.data.warningCount  });
+    // //swal("Inserted: "+res.data.affectedRows+"& Duplicate:"+res.data.warningCount);
 
 
-// }
+
+    //console.log(_.times(INITIAL_PRODUCTS_COUNT, generateRow));
+    // axios.get('http://127.0.0.1:3005/scraper')
+    //     .then(res => {
+    //     const stockparam = res;
+    //     //this.setState({ stockparam });
+    //     console.log(stockparam);
+    // })
+
+    this.setState({ loading: true }, () => {
+     
+      axios.get('http://127.0.0.1:3005/scraper')
+      .then(res => {
+
+        this.setState({loading: false,});   //data: [...result.data],
+        const stockparam = res;
+        //this.setState({ stockparam });
+        console.log(stockparam);
+
+      })
+        
+
+    });
+
+
+
+
+    // swal({
+    //   icon: 'success',
+    //   title: '!',
+    //   text: 'Successfully Uploaded!',
+    //   footer: '<a href>Go here to see uploaded data</a>'
+    // })
+
+    // affectedRows - Insert
+    // warningCount - Duplicate
+    // changedRows
+
+    //});
+    //window.location = 'http://127.0.0.1:4100/tables/stock-market'; 
+
+    event.preventDefault();
+    //}
+    //########  Stock Parameter Add Form End  ##########
+
+
+}
 
 
 render() {
@@ -112,6 +143,8 @@ render() {
     "market_symbol",
     ];
 
+    const loading = this.state.loading;
+
     //console.log(this.state.data);
 
 
@@ -119,7 +152,7 @@ render() {
             <React.Fragment>
         <Container><Row> 
         <HeaderMain 
-                title="Upload Stock List"
+                title="Scrap From Site"
                 className="mb-5 mt-4"
             />
                 
@@ -131,16 +164,13 @@ render() {
                     <Card className="mb-3">
                         <CardBody>
                             
-                            { /* START FormStockParam */}
-                            
-                            <CsvParse
-      keys={keys}
-      onDataUploaded={this.handleData}
-      onError={this.handleError}
-      render={onChange => <input type="file" onChange={onChange} />}
-    /><br/><br/>
-    <button type="button" name="submit" onClick={e => this.handleInsert(e)}>Upload</button><br/><br/>
-    <span >Total Inserted: <b>{this.state.totalInsert}</b> && Total Duplicates Data Found On Your File <b>{this.state.totalDuplicate}</b> </span>
+                            { /* START FormStockParam */}                            
+                           
+    <button type="button" name="Start" onClick={e => this.handleScrapping(e)}>Start</button><br/><br/>
+    <span ><b>{this.state.scrapStateMsg}</b> <b>{this.state.scrapStateDoneMsg}</b> </span>
+
+    {loading ? 'Scrapping...please wait!' : ''}
+
                             { /* END Form */}
                         </CardBody>
                     </Card>
