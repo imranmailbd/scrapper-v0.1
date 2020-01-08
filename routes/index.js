@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const getResults = require("../scrapper");
+//const getResults = require("../scrapper");
+const getResultsApi = require("../scraperapi");
 
 //New
 var http = require("http");
@@ -26,33 +27,220 @@ const hpq = require('hpq');
 
 //New
 //app.use(cors());
-var connection = mysql.createConnection({
-  host     : 'localhost',
-  user     : 'root',
-  password : 'test1234',
-  database : 'myapp'
-});
 
-connection.connect(function(err) {
-  if (err) throw err
-  console.log('You are now connected with mysql database...')
-})  
+// var connection = mysql.createConnection({
+//   host     : 'localhost',
+//   user     : 'root',
+//   password : 'test1234',
+//   database : 'myapp'
+// });
 
+// connection.connect(function(err) {
+//   if (err) throw err
+//   console.log('You are now connected with mysql database...')
+// }) 
+
+
+
+
+// var db_config = {
+//   host: 'localhost',
+//     user: 'root',
+//     password: 'test1234',
+//     database: 'myapp'
+// };
+
+// var connection; 
+
+// function handleDisconnect() {
+//   connection = mysql.createConnection(db_config); // Recreate the connection, since
+//                                                   // the old one cannot be reused.
+
+//   connection.connect(function(err) {              // The server is either down
+//     if(err) {                                     // or restarting (takes a while sometimes).
+//       console.log('error when connecting to db:', err);
+//       setTimeout(handleDisconnect, 2000); // We introduce a delay before attempting to reconnect,
+//     }                                     // to avoid a hot loop, and to allow our node script to
+//   });                                     // process asynchronous requests in the meantime.
+//                                           // If you're also serving http, display a 503 error.
+//   connection.on('error', function(err) {
+//     console.log('db error', err);
+//     if(err.code === 'PROTOCOL_CONNECTION_LOST') { // Connection to the MySQL server is usually
+//       handleDisconnect();                         // lost due to either server restart, or a
+//     } else {                                      // connnection idle timeout (the wait_timeout
+//        throw err;                                 // server variable configures this)
+//     }
+// 	});
+// }
+
+// handleDisconnect();
 
 
 /* GET home page. */
-router.get("/", async function(req, res, next) {
-  const result = await getResults();
-  res.render("index", result);
-  res.send('respond with a resource');
+// router.get("/", async function(req, res, next) {
+//   const result = await getResults();
+//   res.render("index", result);
+//   res.send('respond with a resource');
+// });
+
+// router.get('/stockParameterEditRead/(:id)', function (req, res) {
+//   connection.query('select id, id as edit_id, market_symbol, company_symbol, status from stock_parameter where id='+req.params.id, function (error, results, fields) {
+//    if (error) throw error;
+//    res.end(JSON.stringify(results));
+//   });
+// });
+
+
+/* GET home page. */
+router.get("/scraperapi/(:dirname)", async function(req, res, next) { 
+
+  	var connection = mysql.createConnection(
+	    {
+	      host     : 'localhost',
+	      user     : 'root',
+	      password : 'test1234',
+	      database : 'myapp',
+	    }
+	);
+ 
+	connection.connect();
+
+	var paramDir = req.params.dirname;
+
+  const result = await getResultsApi(paramDir);
+  //const resultRows = result.resultRes;
+  //res.render("index", result);
+  //res.send('respond with a resource');
+
+  const resultRows = result.siteRawData;
+
+  var myData = [];
+
+  resultRows.map(scraprow => {
+
+  	var scrapStrObj = {};
+
+  	const $ = cheerio.load(scraprow);
+	
+	scrapStrObj.href = $('.no-underline').attr('href');
+	scrapStrObj.company_name_text = $('.ticker-area').text();
+	scrapStrObj.title = $('.title-area').text();
+
+
+	var str2 = String(scrapStrObj.href);
+	var res2 = str2.split("/");
+	//console.log(res2);                 
+	var market_name=res2[2];
+	var company_name=res2[3]; 
+	// market_name = String(market_name); 
+	// company_name = String(company_name);
+	scrapStrObj.market_name = market_name;                 
+	scrapStrObj.company_name = company_name; 
+
+	var str = scraprow;
+	var res = str.split("</td>");                   
+	var rawbuy=res[3];
+	var rawsell=res[4]; 
+	rawbuy = String(rawbuy); 
+	rawsell = String(rawsell);                   
+
+	if ((rawbuy===null) || (rawbuy==='')){
+	//console.log('none');
+	scrapStrObj.buy = null; 
+	} 
+
+	if ((rawbuy!==null) || (rawbuy!=='')){
+	  const stripHtml = require("string-strip-html");
+	  //console.log(stripHtml(rawbuy));  
+	  scrapStrObj.buy = stripHtml(rawbuy);                    
+	}
+
+	if ((rawsell===null) || (rawsell==='')){
+	  //console.log('none');
+	  scrapStrObj.sell = null; 
+	} 
+
+	if ((rawsell!==null) || (rawsell!=='')){
+	  const stripHtml = require("string-strip-html");
+	  //console.log(stripHtml(rawsell));  
+	  scrapStrObj.sell = stripHtml(rawsell);
+	} 
+
+
+	var date;
+	date = new Date();
+	date = date.getUTCFullYear() + '-' +
+	    ('00' + (date.getUTCMonth()+1)).slice(-2) + '-' +
+	    ('00' + date.getUTCDate()).slice(-2);
+
+
+	const scraped_data = {
+            market_name: scrapStrObj.market_name, 
+            company_name: scrapStrObj.company_name, 
+            company_name_text: scrapStrObj.company_name_text, 
+            href: scrapStrObj.href, 
+            title: scrapStrObj.title, 
+            rating: scrapStrObj.buy, 
+            pricetarget: scrapStrObj.sell, 
+            created_at: date, 
+            updated_at: ''
+          }
+	myData.push(scraped_data);
+
+
+  }); 
+
+  var dataResponse = myData.splice(0, 1);
+
+  const {status, resultRes, msg} = {status:200,resultRes:myData, msg:'successfully scrap'}; 
+
+  let objectArrayScr = myData;
+  //console.log(objectArrayScr);
+  bulkInsertTest(connection, 'scraped_data', objectArrayScr, (error, response) => {
+    if (error) res.send(error);
+    return res.end(JSON.stringify({status, resultRes, msg})); 
+  });
+
+  
+  connection.end();
+
+
 });
+
+
 
 
 
 /* GET home page. */
 router.get("/scraper", async function(req, res, next) {
 
-  const result = await getResults();
+ 
+
+
+
+  var url_postfix = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
+
+//setTimeout(function(){doSomethingElse();}, 500);
+function sleep(ms){
+    return new Promise(resolve=>{
+        setTimeout(resolve,ms)
+    })
+}
+  //console.log(url_postfix[0]);
+  for (let index = 0; index < url_postfix.length; index++) {
+
+  	var connection = mysql.createConnection(
+	    {
+	      host     : 'localhost',
+	      user     : 'root',
+	      password : 'test1234',
+	      database : 'myapp',
+	    }
+	);
+ 
+	connection.connect();
+
+  const result = await getResults(url_postfix[index]);
   //const resultRows = result.resultRes;
   //res.render("index", result);
   //res.send('respond with a resource');
@@ -121,7 +309,7 @@ router.get("/scraper", async function(req, res, next) {
 	    // ('00' + date.getUTCHours()).slice(-2) + ':' + 
 	    // ('00' + date.getUTCMinutes()).slice(-2) + ':' + 
 	    // ('00' + date.getUTCSeconds()).slice(-2);
-	console.log(date);
+	//console.log(date);
 
 
 
@@ -196,11 +384,20 @@ router.get("/scraper", async function(req, res, next) {
 
   let objectArrayScr = myData;
   //console.log(objectArrayScr);
-  bulkInsert(connection, 'scraped_data', objectArrayScr, (error, response) => {
+  bulkInsertTest(connection, 'scraped_data', objectArrayScr, (error, response) => {
     if (error) res.send(error);
     return res.end(JSON.stringify({status, resultRes, msg})); 
   });
-   
+
+  // if((url_postfix[index] === 'E' ) || (url_postfix[index] === 'J' ) || (url_postfix[index] === 'O' ) || (url_postfix[index] === 'S' ) ){
+  //   await sleep(20000);
+  //   console.log('sleeping....')
+  // }
+
+  connection.end();
+  
+  
+  } 
 
 
   //user_info[0]
@@ -232,6 +429,21 @@ router.get("/scraper", async function(req, res, next) {
 
 });
 
+function bulkInsertTest(connection, table, objectArray, callback) {
+ 
+  let keys = Object.keys(objectArray[0]);
+  let values = objectArray.map( obj => keys.map( key => obj[key]));
+  let sql = 'INSERT IGNORE INTO ' + table + ' (' + keys.join(',') + ') VALUES ? ';
+  var query = connection.query(sql, [values], function (err, results, fields) {
+    if (err) console.log(err.code);
+    //console.log(results.affectedRows);
+    callback(null, results);
+
+  });
+
+
+}
+
 
 //###################  Database Model Start ####################
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -260,7 +472,7 @@ router.post('/stockParameterEdit/(:id)', function (req, res) {
   //           created_at: req.sanitize('created_at').escape().trim(),
   //           updated_at: req.sanitize('updated_at').escape().trim()
   //       }
-  console.log(req.body);
+  //console.log(req.body);
 
   var param = {
             market_symbol: req.body.market_symbol,
@@ -418,6 +630,36 @@ function bulkInsert(connection, table, objectArray, callback) {
 
 
 
+ 
+
+
+  
+  //connection.query('INSERT INTO names SET name=?', "sameer", function(err, result) {
+    
+ 
+    //var log = result.insertId;
+ 
+    // connection.query('INSERT INTO log SET logid=?', log, function(err, result) {
+    //   if (err) { 
+    //     connection.rollback(function() {
+    //       throw err;
+    //     });
+    //   }  
+    //   connection.commit(function(err) {
+    //     if (err) { 
+    //       connection.rollback(function() {
+    //         throw err;
+    //       });
+    //     }
+    //     console.log('Transaction Complete.');
+    //     connection.end();
+    //   });
+    // });
+  //});
+
+
+
+
 // var query = connection.query({
 //     sql: queryString,
 //     timeout: 10000,
@@ -440,6 +682,49 @@ function bulkInsert(connection, table, objectArray, callback) {
 
 
 }
+
+
+
+
+
+ function bulkInsertTran(connection, table, objectArray, callback) {
+  
+  // let keys = Object.keys(objectArray[0]);
+  // let values = objectArray.map( obj => keys.map( key => obj[key]));
+  // let sql = 'INSERT INTO ' + table + ' (' + keys.join(',') + ') VALUES ? ';
+  // connection.query(sql, [values], function (error, results, fields) {
+  //   if (error) callback(error);
+  //   callback(null, results);
+  // });
+
+  // connection.query('INSERT IGNORE INTO ' + table + ' (market_symbol, company_symbol) VALUES ?',
+  //     [objectArray.map(item => [item.market_symbol, item.company_symbol])],
+  //     (error, results) => {
+  //         if (error) callback(error);
+  //         callback(null, results);
+  //     }
+  // );
+
+  let keys = Object.keys(objectArray[0]);
+  let values = objectArray.map( obj => keys.map( key => obj[key]));
+  let sql = 'INSERT IGNORE INTO ' + table + ' (' + keys.join(',') + ') VALUES ? ';
+
+  connection.beginTransaction(function(error) {
+      if (error) { throw error; }
+	  var query = connection.query(sql, [values], function (error, results, fields) {
+	    if (error) console.log(err.code);
+	    if (error) { 
+	      connection.rollback(function() {
+	        throw error;
+	      });
+	    }
+	    //console.log(results.affectedRows);
+	    callback(null, results);
+
+	  });
+  });
+
+ } 
 
 
 //Use for Scraping Data Insert

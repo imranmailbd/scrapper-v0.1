@@ -5,27 +5,23 @@ const hpq = require('hpq');
 const siteUrl = "https://www.marketbeat.com/stocks/directory/";
 
 let siteRawData = "";
-// const tags = new Set();
-// const title = new Set();
-// const link = new Set();
-// const rating = new Set();
 
 let scrapdata = [];
 
 
-const fetchData = async (postfx) => {
+const fetchDataApi = async (postfx) => {
   //console.log('this is:');
   //console.log(siteUrl+postfx);
   const result = await axios.get(siteUrl+postfx);
   return cheerio.load(result.data);
 };
 
-const getResults = async (url_postfix) => {
+const getResultsApi = async (url_postfix) => {
 
   //console.log(url_postfix);
   const postfx = url_postfix;
 
-  const $ = await fetchData(postfx);
+  const $ = await fetchDataApi(postfx);
 
 
   //################################################
@@ -70,4 +66,4 @@ const getResults = async (url_postfix) => {
   };
 };
 
-module.exports = getResults;
+module.exports = getResultsApi;

@@ -97,9 +97,23 @@ handleScrapping(e) {
     //     console.log(stockparam);
     // })
 
+
+
+
     this.setState({ loading: true }, () => {
      
-      axios.get('http://127.0.0.1:3005/scraper')
+      // axios.get('http://127.0.0.1:3005/scraper')
+      // .then(res => {
+
+      //   this.setState({loading: false,});   //data: [...result.data],
+      //   const stockparam = res;
+      //   //this.setState({ stockparam });
+      //   console.log(stockparam);
+
+      // })
+
+
+      axios.get('http://127.0.0.1:3005/scraperapi/O')
       .then(res => {
 
         this.setState({loading: false,});   //data: [...result.data],
