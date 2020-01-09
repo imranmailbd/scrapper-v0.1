@@ -6,7 +6,7 @@ const siteUrl = "https://www.marketbeat.com/stocks/directory/";
 
 let siteRawData = "";
 // const tags = new Set();
-// const title = new Set();
+// const company_name = new Set();
 // const link = new Set();
 // const rating = new Set();
 
@@ -48,7 +48,7 @@ const getResults = async (url_postfix) => {
   //   tags.add($(element).text());
   // });
   // $(".title-area").each((index, element) => {
-  //   title.add($(element).text());
+  //   company_name.add($(element).text());
   // });
   // //$(this).attr('href');
   // $(".no-underline").each((index, element) => {
@@ -57,13 +57,13 @@ const getResults = async (url_postfix) => {
   // $("div.nav p").each((index, element) => {
   //   categories.add($(element).text());
   // });
-  // $('.company_and_position [itemprop="title"]').each((index, element) => {
+  // $('.company_and_position [itemprop="company_name"]').each((index, element) => {
   //   positions.add($(element).text());
   // });
   return {
     //positions: [...positions].sort(),
     //tags: [...tags].sort(),
-    //title: [...title].sort(),
+    //company_name: [...company_name].sort(),
     //link: [...link].sort(),
     //categories: [...categories].sort(),
     siteRawData,

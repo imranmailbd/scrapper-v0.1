@@ -70,38 +70,26 @@ constructor(props) {
 handleScrapping(e) {
     
     //console.log(data);
-    //alert('data');
-    
-
-    //if(event.target.elements.form_flag.value === "csv_paeameter_upload"){
-    //const stock_param_data_csv = this.state.data;
-
-    // axios.post('http://127.0.0.1:3005/scraper', stock_param_data_csv)
-    // .then(res => {           
-    // //this.setState({ stock_param_data_csv });
-    // //console.log(res);
-    // //console.log(res.data.affectedRows);
-    // //console.log(res.data.warningCount);
-    // //this.setState({ message: "Total Inserted: "+res.data.affectedRows+" & Duplicate: "+res.data.warningCount });
-    // this.setState({ totalInsert:res.data.affectedRows  });
-    // this.setState({ totalDuplicate:res.data.warningCount  });
-    // //swal("Inserted: "+res.data.affectedRows+"& Duplicate:"+res.data.warningCount);
-
-
-
-    //console.log(_.times(INITIAL_PRODUCTS_COUNT, generateRow));
-    // axios.get('http://127.0.0.1:3005/scraper')
-    //     .then(res => {
-    //     const stockparam = res;
-    //     //this.setState({ stockparam });
-    //     console.log(stockparam);
-    // })
-
-
-
-
+    //alert('data');    
+   
     this.setState({ loading: true }, () => {
-     
+           
+      //let url_postfix = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
+      let url_postfix = ['A'];
+      url_postfix.map(scrapdir => {
+        
+        axios.get('http://127.0.0.1:3005/scraperapi/'+scrapdir)
+          .then(res => {
+
+            this.setState({loading: false,});   //data: [...result.data],
+            const stockparam = res;
+            //this.setState({ stockparam });
+            console.log(stockparam);
+
+          })
+
+      } );
+
       // axios.get('http://127.0.0.1:3005/scraper')
       // .then(res => {
 
@@ -110,29 +98,18 @@ handleScrapping(e) {
       //   //this.setState({ stockparam });
       //   console.log(stockparam);
 
-      // })
+      // })      
 
-
-      axios.get('http://127.0.0.1:3005/scraperapi/O')
-      .then(res => {
-
-        this.setState({loading: false,});   //data: [...result.data],
-        const stockparam = res;
-        //this.setState({ stockparam });
-        console.log(stockparam);
-
-      })
-        
+      //const postPrfx = map(url_postfix, ({ x, y }) => ({ 
+        //console.log(x);
+      //}));      
 
     });
 
-
-
-
     // swal({
     //   icon: 'success',
-    //   title: '!',
-    //   text: 'Successfully Uploaded!',
+    //   //title: '!',
+    //   text: 'Scraping Done!',
     //   footer: '<a href>Go here to see uploaded data</a>'
     // })
 

@@ -16,6 +16,7 @@ constructor(props) {
         super(props)
         this.state = {
           data: [],
+          errordata: [],
           totalInsert: "Nothing till inserted...",
           totalDuplicate:'N/A'
         }
@@ -60,6 +61,48 @@ handleData = data => {
 
 }
 
+
+
+
+
+handleError = errordata => {
+    //console.log(data);
+    this.setState({ errordata })
+
+    // //if(event.target.elements.form_flag.value === "csv_paeameter_upload"){
+    // const stock_param_data_csv = data;
+
+    // axios.post('http://127.0.0.1:3005/api/stockParameterInsertCsv', stock_param_data_csv)
+    // .then(res => {           
+    // //this.setState({ stock_param_data_csv });
+    // //console.log(res);
+    // //console.log(res.data.affectedRows);
+    // //console.log(res.data.warningCount);
+    // //this.setState({ message: "Total Inserted: "+res.data.affectedRows+" & Duplicate: "+res.data.warningCount });
+    // this.setState({ totalInsert:res.data.affectedRows  });
+    // this.setState({ totalDuplicate:res.data.warningCount  });
+    // //swal("Inserted: "+res.data.affectedRows+"& Duplicate:"+res.data.warningCount);
+
+    // // swal({
+    // //   icon: 'error',
+    // //   title: 'Oops...',
+    // //   text: 'Something went wrong!',
+    // //   footer: '<a href>Why do I have this issue?</a>'
+    // // })
+
+    // // affectedRows - Insert
+    // // warningCount - Duplicate
+    // // changedRows
+
+    // });
+    // //window.location = 'http://127.0.0.1:4100/tables/stock-market'; 
+
+    // event.preventDefault();
+    // //}
+    // //########  Stock Parameter Add Form End  ##########
+
+
+}
 
 
 
@@ -110,7 +153,7 @@ render() {
     "market_symbol",
     ];
 
-    //console.log(this.state.data);
+    console.log(this.state.data);
 
 
     return (

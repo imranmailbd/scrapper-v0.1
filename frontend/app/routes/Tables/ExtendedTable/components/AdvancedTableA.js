@@ -45,7 +45,7 @@ const sortCaret = (order) => {
 const generateRow = (index) => ({
     id: index,
     market_name: faker.commerce.productName(),
-    company_name: randomArray([
+    company_symbol: randomArray([
         ProductQuality.Bad,
         ProductQuality.Good,
         ProductQuality.Unknown
@@ -68,7 +68,7 @@ export class AdvancedTableA extends React.Component {
 
 //http://127.0.0.1:4100/tables/extended-table         
 
-//[{"id": 0, "market_name": "Refined Plastic Pants2", "company_name": "Good", "price": "1577.61", "satisfaction": "5", "inStockDate":""}]
+//[{"id": 0, "market_name": "Refined Plastic Pants2", "company_symbol": "Good", "price": "1577.61", "satisfaction": "5", "inStockDate":""}]
 
         this.headerCheckboxRef = React.createRef();
     }
@@ -85,7 +85,7 @@ export class AdvancedTableA extends React.Component {
               })
         
 //products: [{id:0,name:'hat',quality:'good',price:'17',satisfaction:'ok',inStockDate:'Tue Jul 23 2019 08:51:11 GMT+0600 (Bangladesh Standard Time)'},{id:1,name:'hat2',quality:'good',price:'17',satisfaction:'ok',inStockDate:'Tue Jul 23 2019 08:51:11 GMT+0600 (Bangladesh Standard Time)'}]),
-// {id: 1, market_name: "NASDAQ", company_name: "ABDC", company_name_text: "ABDC", href: "/stocks/NASDAQ/ABDC/", …}
+// {id: 1, market_name: "NASDAQ", company_symbol: "ABDC", company_symbol_text: "ABDC", href: "/stocks/NASDAQ/ABDC/", …}
 // title: "Alcentra Capital"
 // rating: "N/A"
 // pricetarget: "N/A"
@@ -169,7 +169,7 @@ export class AdvancedTableA extends React.Component {
                 getFilter: filter => { this.nameFilter = filter; }
             })
         }, {
-            dataField: 'company_name',
+            dataField: 'company_symbol',
             text: 'Company Name',            
             sort: true,
             sortCaret

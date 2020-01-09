@@ -17,7 +17,11 @@ var bcrypt = require('bcryptjs');
 //var mongoose = require('mongoose');
 var uuidv4 = require('uuid/v4');
 var router = express.Router();
+var bodyParser = require('body-parser');
 
+
+app.use(bodyParser.json({limit: '10mb', extended: true}))
+app.use(bodyParser.urlencoded({limit: '10mb', extended: true}))
 
 
 

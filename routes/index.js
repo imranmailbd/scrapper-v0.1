@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-//const getResults = require("../scrapper");
+const getResults = require("../scrapper");
 const getResultsApi = require("../scraperapi");
 
 //New
@@ -22,23 +22,24 @@ const cheerio = require("cheerio");
 const axios = require("axios");
 const hpq = require('hpq');
 
+var bodyParser = require('body-parser');
 
 
 
 //New
 //app.use(cors());
 
-// var connection = mysql.createConnection({
-//   host     : 'localhost',
-//   user     : 'root',
-//   password : 'test1234',
-//   database : 'myapp'
-// });
+var connection = mysql.createConnection({
+  host     : 'localhost',
+  user     : 'root',
+  password : 'test1234',
+  database : 'myapp'
+});
 
-// connection.connect(function(err) {
-//   if (err) throw err
-//   console.log('You are now connected with mysql database...')
-// }) 
+connection.connect(function(err) {
+  if (err) throw err
+  console.log('You are now connected with mysql database...')
+}) 
 
 
 
@@ -123,19 +124,19 @@ router.get("/scraperapi/(:dirname)", async function(req, res, next) {
   	const $ = cheerio.load(scraprow);
 	
 	scrapStrObj.href = $('.no-underline').attr('href');
-	scrapStrObj.company_name_text = $('.ticker-area').text();
-	scrapStrObj.title = $('.title-area').text();
+	scrapStrObj.company_symbol_text = $('.ticker-area').text();
+	scrapStrObj.company_name = $('.title-area').text();
 
 
 	var str2 = String(scrapStrObj.href);
 	var res2 = str2.split("/");
 	//console.log(res2);                 
-	var market_name=res2[2];
-	var company_name=res2[3]; 
-	// market_name = String(market_name); 
-	// company_name = String(company_name);
-	scrapStrObj.market_name = market_name;                 
-	scrapStrObj.company_name = company_name; 
+	var market_symbol=res2[2];
+	var company_symbol=res2[3]; 
+	// market_symbol = String(market_symbol); 
+	// company_symbol = String(company_symbol);
+	scrapStrObj.market_symbol = market_symbol;                 
+	scrapStrObj.company_symbol = company_symbol; 
 
 	var str = scraprow;
 	var res = str.split("</td>");                   
@@ -174,18 +175,18 @@ router.get("/scraperapi/(:dirname)", async function(req, res, next) {
 	    ('00' + date.getUTCDate()).slice(-2);
 
 
-	const scraped_data = {
-            market_name: scrapStrObj.market_name, 
-            company_name: scrapStrObj.company_name, 
-            company_name_text: scrapStrObj.company_name_text, 
+	const stock_scrap = {
+            market_symbol: scrapStrObj.market_symbol, 
+            company_symbol: scrapStrObj.company_symbol, 
+            company_symbol_text: scrapStrObj.company_symbol_text, 
             href: scrapStrObj.href, 
-            title: scrapStrObj.title, 
-            rating: scrapStrObj.buy, 
-            pricetarget: scrapStrObj.sell, 
+            company_name: scrapStrObj.company_name, 
+            consensus_rating: scrapStrObj.buy, 
+            consensus_price_target: scrapStrObj.sell, 
             created_at: date, 
             updated_at: ''
           }
-	myData.push(scraped_data);
+	myData.push(stock_scrap);
 
 
   }); 
@@ -196,7 +197,7 @@ router.get("/scraperapi/(:dirname)", async function(req, res, next) {
 
   let objectArrayScr = myData;
   //console.log(objectArrayScr);
-  bulkInsertTest(connection, 'scraped_data', objectArrayScr, (error, response) => {
+  bulkInsertTest(connection, 'stock_scrap', objectArrayScr, (error, response) => {
     if (error) res.send(error);
     return res.end(JSON.stringify({status, resultRes, msg})); 
   });
@@ -256,19 +257,19 @@ function sleep(ms){
   	const $ = cheerio.load(scraprow);
 	
 	scrapStrObj.href = $('.no-underline').attr('href');
-	scrapStrObj.company_name_text = $('.ticker-area').text();
-	scrapStrObj.title = $('.title-area').text();
+	scrapStrObj.company_symbol_text = $('.ticker-area').text();
+	scrapStrObj.company_name = $('.title-area').text();
 
 
 	var str2 = String(scrapStrObj.href);
 	var res2 = str2.split("/");
 	//console.log(res2);                 
-	var market_name=res2[2];
-	var company_name=res2[3]; 
-	// market_name = String(market_name); 
-	// company_name = String(company_name);
-	scrapStrObj.market_name = market_name;                 
-	scrapStrObj.company_name = company_name; 
+	var market_symbol=res2[2];
+	var company_symbol=res2[3]; 
+	// market_symbol = String(market_symbol); 
+	// company_symbol = String(company_symbol);
+	scrapStrObj.market_symbol = market_symbol;                 
+	scrapStrObj.company_symbol = company_symbol; 
 
 	var str = scraprow;
 	var res = str.split("</td>");                   
@@ -313,31 +314,31 @@ function sleep(ms){
 
 
 
-	const scraped_data = {
-            market_name: scrapStrObj.market_name, 
-            company_name: scrapStrObj.company_name, 
-            company_name_text: scrapStrObj.company_name_text, 
+	const stock_scrap = {
+            market_symbol: scrapStrObj.market_symbol, 
+            company_symbol: scrapStrObj.company_symbol, 
+            company_symbol_text: scrapStrObj.company_symbol_text, 
             href: scrapStrObj.href, 
-            title: scrapStrObj.title, 
-            rating: scrapStrObj.buy, 
-            pricetarget: scrapStrObj.sell, 
+            company_name: scrapStrObj.company_name, 
+            consensus_rating: scrapStrObj.buy, 
+            consensus_price_target: scrapStrObj.sell, 
             created_at: date, 
             updated_at: ''
           }
-	myData.push(scraped_data);
+	myData.push(stock_scrap);
 
 
 	// tags = $('.ticker-area').text();
- //  	title = $('.title-area').text();
+ //  	company_name = $('.title-area').text();
 
 
   // 		let $ = cheerio.load(scraprow);
-		// let title = $('div[class="title_wrapper"] > h1').text().trim();
-		// let rating = $('div[class="ratingValue"] > strong > span').text();
-		// let ratingCount = $('div[class="imdbRating"] > a').text();
+		// let company_name = $('div[class="title_wrapper"] > h1').text().trim();
+		// let consensus_rating = $('div[class="consensus_ratingValue"] > strong > span').text();
+		// let consensus_ratingCount = $('div[class="imdbRating"] > a').text();
 		// let data = {
-		//     title,
-		//     rating,
+		//     company_name,
+		//     consensus_rating,
 		//     ratingCount
 		// };
 
@@ -365,15 +366,15 @@ function sleep(ms){
           // const mydata = hpq.parse( scraprow, {
           //     src: hpq.attr( 'img', 'src' ),
           //     href: hpq.attr( 'a', 'href' ),
-          //     company_name_text: hpq.query( '.ticker-area', hpq.text() ),
-          //     title: hpq.query( '.title-area', hpq.text() ),
+          //     company_symbol_text: hpq.query( '.ticker-area', hpq.text() ),
+          //     company_name: hpq.query( '.title-area', hpq.text() ),
 
           // } );
 
           // scrapStrObj.src = mydata.src;
           // scrapStrObj.href = mydata.href;
-          // scrapStrObj.company_name_text = mydata.company_name_text;
-          // scrapStrObj.title = mydata.title;
+          // scrapStrObj.company_symbol_text = mydata.company_symbol_text;
+          // scrapStrObj.company_name = mydata.company_name;
 
 
   }); 
@@ -384,7 +385,7 @@ function sleep(ms){
 
   let objectArrayScr = myData;
   //console.log(objectArrayScr);
-  bulkInsertTest(connection, 'scraped_data', objectArrayScr, (error, response) => {
+  bulkInsertTest(connection, 'stock_scrap', objectArrayScr, (error, response) => {
     if (error) res.send(error);
     return res.end(JSON.stringify({status, resultRes, msg})); 
   });
@@ -730,8 +731,8 @@ function bulkInsert(connection, table, objectArray, callback) {
 //Use for Scraping Data Insert
 router.post('/api/scrapingDataInsert',(req, res) => {
   console.log(req);
-  let data = {market_name: req.body.market_name, company_name: req.body.company_name, company_name_text: req.body.company_name_text, href: req.body.href, title: req.body.title, rating: req.body.rating, pricetarget: req.body.pricetarget, created_at: req.body.created_at, updated_at: req.body.updated_at};
-  let sql = "INSERT INTO scraped_data SET ?";
+  let data = {market_symbol: req.body.market_symbol, company_symbol: req.body.company_symbol, company_symbol_text: req.body.company_symbol_text, href: req.body.href, company_name: req.body.company_name, consensus_rating: req.body.consensus_rating, consensus_price_target: req.body.consensus_price_target, created_at: req.body.created_at, updated_at: req.body.updated_at};
+  let sql = "INSERT INTO stock_scrap SET ?";
   let query = connection.query(sql, data,(err, results) => {
     if(err) throw err;
     res.redirect('/');
@@ -743,7 +744,7 @@ router.post('/api/scrapingDataInsert',(req, res) => {
 
 //route for insert data
 router.get('/api/scrapedData', function (req, res) {
-   connection.query('select id,market_name,company_name,pricetarget,title,created_at from scraped_data', function (error, results, fields) {
+   connection.query('select id,market_symbol,company_symbol,consensus_price_target,company_name,created_at from stock_scrap', function (error, results, fields) {
    if (error) throw error;
    res.end(JSON.stringify(results));
  });
