@@ -24,6 +24,11 @@ app.use(bodyParser.json({limit: '10mb', extended: true}))
 app.use(bodyParser.urlencoded({limit: '10mb', extended: true}))
 
 
+//#############################
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, 'frontend/build')));
+//################################
+
 
 
 app.use(cors())
@@ -87,6 +92,17 @@ app.use('/', indexRouter);
 app.use(function(req, res, next) {
   next(createError(404));
 });
+
+
+//##########################
+// The "catchall" handler: for any request that doesn't
+// match one above, send back React's index.html file.
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname+'/frontend/build/index.html'));
+});
+//############################
+
+
 
 // error handler
 app.use(function(err, req, res, next) {
