@@ -5,10 +5,10 @@ const hpq = require('hpq');
 const siteUrl = "https://www.marketbeat.com/stocks/directory/";
 
 let siteRawData = "";
-// const tags = new Set();
-// const company_name = new Set();
-// const link = new Set();
-// const rating = new Set();
+const tags = new Set();
+const company_name = new Set();
+const link = new Set();
+//const rating = new Set();
 
 let scrapdata = [];
 
@@ -44,16 +44,16 @@ const getResults = async (url_postfix) => {
 
   siteRawData = scrapdata;  //$('.PageTitleHOne').text();
 
-  // $(".ticker-area").each((index, element) => {
-  //   tags.add($(element).text());
-  // });
-  // $(".title-area").each((index, element) => {
-  //   company_name.add($(element).text());
-  // });
-  // //$(this).attr('href');
-  // $(".no-underline").each((index, element) => {
-  //   link.add($(element).attr('href'));
-  // });
+  $(".ticker-area").each((index, element) => {
+    tags.add($(element).text());
+  });
+  $(".title-area").each((index, element) => {
+    company_name.add($(element).text());
+  });
+  //$(this).attr('href');
+  $(".no-underline").each((index, element) => {
+    link.add($(element).attr('href'));
+  });
   // $("div.nav p").each((index, element) => {
   //   categories.add($(element).text());
   // });
@@ -62,11 +62,10 @@ const getResults = async (url_postfix) => {
   // });
   return {
     //positions: [...positions].sort(),
-    //tags: [...tags].sort(),
-    //company_name: [...company_name].sort(),
-    //link: [...link].sort(),
+    tags: [...tags].sort(),
+    company_name: [...company_name].sort(),
+    link: [...link].sort(),
     //categories: [...categories].sort(),
-    siteRawData,
   };
 };
 

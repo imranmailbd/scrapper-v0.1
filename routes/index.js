@@ -78,11 +78,11 @@ connection.connect(function(err) {
 
 
 /* GET home page. */
-// router.get("/", async function(req, res, next) {
-//   const result = await getResults();
-//   res.render("index", result);
-//   res.send('respond with a resource');
-// });
+router.get("/", async function(req, res, next) {
+  const result = await getResults('A');
+  res.render("index", result);
+  res.send('respond with a resource');
+});
 
 // router.get('/stockParameterEditRead/(:id)', function (req, res) {
 //   connection.query('select id, id as edit_id, market_symbol, company_symbol, status from stock_parameter where id='+req.params.id, function (error, results, fields) {
