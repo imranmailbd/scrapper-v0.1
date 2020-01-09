@@ -31,11 +31,17 @@ const secret = 'mysecretsshhh';
 //For File Upload
 const DIR = './public/';
 
+// var connection = mysql.createConnection({
+//   host     : 'localhost',
+//   user     : 'root',
+//   password : 'test1234',
+//   database : 'myapp'
+// });
 var connection = mysql.createConnection({
-  host     : 'localhost',
-  user     : 'root',
-  password : 'test1234',
-  database : 'myapp'
+  host     : 'remotemysql.com',
+  user     : 'DoXfd29drf',
+  password : 'ASsCHoibhp',
+  database : 'DoXfd29drf'
 });
 
 app.use( bodyParser.json() );       // to support JSON-encoded bodies
@@ -48,12 +54,19 @@ connection.connect(function(err) {
   console.log('You are now connected with mysql database...')
 })  
 
-var server = app.listen(3005, "127.0.0.1", function () {
-  var host = server.address().address
-  var port = server.address().port 
-  console.log("Example app listening at http://%s:%s", host, port)
-});
 
+// var server = app.listen(3005, "127.0.0.1", function () {
+//   var host = server.address().address
+//   var port = server.address().port 
+//   console.log("Example app listening at http://%s:%s", host, port)
+// });
+
+
+
+const port = process.env.PORT || 5000;
+app.listen(port);
+
+console.log(`Password generator listening on ${port}`);
 
 
 

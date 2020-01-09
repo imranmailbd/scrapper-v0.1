@@ -28,13 +28,19 @@ var bodyParser = require('body-parser');
 
 //New
 //app.use(cors());
-
 var connection = mysql.createConnection({
-  host     : 'localhost',
-  user     : 'root',
-  password : 'test1234',
-  database : 'myapp'
+  host     : 'remotemysql.com',
+  user     : 'DoXfd29drf',
+  password : 'ASsCHoibhp',
+  database : 'DoXfd29drf'
 });
+
+// var connection = mysql.createConnection({
+//   host     : 'localhost',
+//   user     : 'root',
+//   password : 'test1234',
+//   database : 'myapp'
+// });
 
 connection.connect(function(err) {
   if (err) throw err
@@ -95,14 +101,22 @@ router.get("/", async function(req, res, next) {
 /* GET home page. */
 router.get("/scraperapi/(:dirname)", async function(req, res, next) { 
 
-  	var connection = mysql.createConnection(
-	    {
-	      host     : 'localhost',
-	      user     : 'root',
-	      password : 'test1234',
-	      database : 'myapp',
-	    }
-	);
+  	
+	var connection = mysql.createConnection({
+	  host     : 'remotemysql.com',
+	  user     : 'DoXfd29drf',
+	  password : 'ASsCHoibhp',
+	  database : 'DoXfd29drf'
+	});
+
+ //  	var connection = mysql.createConnection(
+	//     {
+	//       host     : 'localhost',
+	//       user     : 'root',
+	//       password : 'test1234',
+	//       database : 'myapp',
+	//     }
+	// );
  
 	connection.connect();
 
@@ -230,14 +244,21 @@ function sleep(ms){
   //console.log(url_postfix[0]);
   for (let index = 0; index < url_postfix.length; index++) {
 
-  	var connection = mysql.createConnection(
-	    {
-	      host     : 'localhost',
-	      user     : 'root',
-	      password : 'test1234',
-	      database : 'myapp',
-	    }
-	);
+  	var connection = mysql.createConnection({
+	  host     : 'remotemysql.com',
+	  user     : 'DoXfd29drf',
+	  password : 'ASsCHoibhp',
+	  database : 'DoXfd29drf'
+	});
+
+ //  	var connection = mysql.createConnection(
+	//     {
+	//       host     : 'localhost',
+	//       user     : 'root',
+	//       password : 'test1234',
+	//       database : 'myapp',
+	//     }
+	// );
  
 	connection.connect();
 
