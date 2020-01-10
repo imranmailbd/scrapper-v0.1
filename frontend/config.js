@@ -20,11 +20,11 @@ var config = {
     // Site Config ====================================================
     siteTitle:              'Node Scrapper V 0.1',
     siteDescription:        'Scrap Marketbits Data',
-    siteCannonicalUrl:      'http://localhost:3000',
+    siteCannonicalUrl:      'https://sheltered-lake-01888.herokuapp.com:3000',
     siteKeywords:           'Market Bits',
     scssIncludes:           [],
     loginAPI:      'http://localhost:5000/api/login',
-    dashboardRoute:      'http://localhost:3000/dashboards/projects'
+    dashboardRoute:      'https://sheltered-lake-01888.herokuapp.com:3000/dashboards/projects'
 }
 
 // var appApiConfig = {
