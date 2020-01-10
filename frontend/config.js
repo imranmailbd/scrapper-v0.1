@@ -6,7 +6,7 @@ var config = {
     rootDir:                root,
     // Targets ========================================================
     serveDir:               path.join(root, '.serve'),
-    distDir:                path.join(root, 'dist'),
+    distDir:                path.join(root, 'build'),
     clientManifestFile:     'manifest.webpack.json',
     clientStatsFile:        'stats.webpack.json',
 
@@ -20,11 +20,11 @@ var config = {
     // Site Config ====================================================
     siteTitle:              'Node Scrapper V 0.1',
     siteDescription:        'Scrap Marketbits Data',
-    siteCannonicalUrl:      'http://127.0.0.1:4100',
+    siteCannonicalUrl:      'http://localhost:3000',
     siteKeywords:           'Market Bits',
     scssIncludes:           [],
-    loginAPI:      'http://127.0.0.1:3005/api/login',
-    dashboardRoute:      'http://127.0.0.1:4100/dashboards/projects'
+    loginAPI:      'http://localhost:5000/api/login',
+    dashboardRoute:      'http://localhost:3000/dashboards/projects'
 }
 
 // var appApiConfig = {

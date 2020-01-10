@@ -97,7 +97,7 @@ export class AdvancedTableA extends React.Component {
         } 
 
         if(userEmailDash === null){       
-            window.location = 'http://127.0.0.1:4100/pages/login';
+            window.location = 'http://localhost:3000/pages/login';
             //console.log('value not set');
             const userEmailDashRedirect = true;
             this.setState({ userEmailDashRedirect });
@@ -126,7 +126,7 @@ export class AdvancedTableA extends React.Component {
             
 
              //console.log(_.times(INITIAL_PRODUCTS_COUNT, generateRow));
-        axios.get('http://127.0.0.1:3005/stockParameterRead')
+        axios.get('http://localhost:5000/stockParameterRead')
               .then(res => {
                 const stockparam = res.data;
                 this.setState({ stockparam });
@@ -202,13 +202,13 @@ export class AdvancedTableA extends React.Component {
 
             var eid = row;
             //console.log(_.times(INITIAL_PRODUCTS_COUNT, generateRow));
-            axios.delete('http://127.0.0.1:3005/stockParameterDelete/'+eid)
+            axios.delete('http://localhost:5000/stockParameterDelete/'+eid)
                   .then(res => {
                    console.log(res);
                   })
             console.log(eid); 
 
-            axios.get('http://127.0.0.1:3005/stockParameterRead')
+            axios.get('http://localhost:5000/stockParameterRead')
               .then(res => {
                 const stockparam = res.data;
                 this.setState({ stockparam });
