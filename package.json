@@ -3,8 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node app.js",
-    "heroku-postbuild": "cd frontend && npm install && npm run build"
+    "heroku-postbuild": "cd frontend && npm install && npm run build",
+    "client": "cd frontend && npm start",
+    "server": "node app.js",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "dependencies": {
     "axios": "^0.19.0",
@@ -25,5 +27,8 @@
     "string-strip-html": "^4.3.12",
     "sweetalert-react": "^0.4.11",
     "uuid": "^3.3.3"
+  },
+  "devDependencies": {
+    "concurrently": "^5.0.2"
   }
 }

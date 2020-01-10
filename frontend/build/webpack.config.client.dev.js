@@ -144,7 +144,7 @@ module.exports = {
         historyApiFallback: {
             index: BASE_PATH
         },
-        host: 'https://sheltered-lake-01888.herokuapp.com',
+        host: 'localhost',
         port: 3000
     }
 }
