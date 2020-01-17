@@ -18,7 +18,7 @@ export const SidebarMiddleNav = () => (
             icon={<i className="fa fa-fw fa-trello"></i>}
             title="Stock"
         >            
-            <SidebarMenu.Item title="Market Data" to='/tables/extended-table' />
+            <SidebarMenu.Item title="All Stock File" to='/tables/extended-table' />
             <SidebarMenu.Item title="Stock" to='/tables/stock-market' />
             <SidebarMenu.Item title="Scraping" to='/forms/scraping' />
             <SidebarMenu.Item title="Upload Stock List" to='/forms/form-csv-upload' />

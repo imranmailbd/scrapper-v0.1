@@ -44,15 +44,16 @@ const sortCaret = (order) => {
 
 const generateRow = (index) => ({
     id: index,
-    market_name: faker.commerce.productName(),
+    market_symbol: market_symbol,
     company_symbol: randomArray([
         ProductQuality.Bad,
         ProductQuality.Good,
         ProductQuality.Unknown
     ]),
-    pricetarget: (1000 + Math.random() * 1000).toFixed(2),
-    title: Math.round(Math.random() * 6),
-    created_at: faker.date.past()
+    company_name: Math.round(Math.random() * 6),
+    consensus_rating: Math.round(Math.random() * 6),
+    consensus_price_target: (1000 + Math.random() * 1000).toFixed(2),
+    updated_at: faker.date.past()
 });
 
 export class AdvancedTableA extends React.Component {
@@ -77,7 +78,7 @@ export class AdvancedTableA extends React.Component {
             
 
              //console.log(_.times(INITIAL_PRODUCTS_COUNT, generateRow));
-        axios.get('http://127.0.0.1:3005/api/scrapedData')
+        axios.get('http://127.0.0.1:5000/api/scrapedData')
               .then(res => {
                 const persons = res.data;
                 this.setState({ persons });
@@ -141,7 +142,7 @@ export class AdvancedTableA extends React.Component {
     createColumnDefinitions() {
         return [{
             dataField: 'id',
-            text: 'Product ID',
+            text: 'ID',
             headerFormatter: column => (
                 <React.Fragment>
                     <span className="text-nowrap">{ column.text }</span>
@@ -155,8 +156,8 @@ export class AdvancedTableA extends React.Component {
                 </React.Fragment>
             )
         }, {
-            dataField: 'market_name',
-            text: 'Market Name',
+            dataField: 'company_symbol',
+            text: 'Company Symbol',
             sort: true,
             sortCaret,
             formatter: (cell) => (
@@ -165,17 +166,17 @@ export class AdvancedTableA extends React.Component {
                 </span>
             ),
             ...buildCustomTextFilter({
-                placeholder: 'Enter product name...',
+                placeholder: 'Enter company symbol...',
                 getFilter: filter => { this.nameFilter = filter; }
             })
         }, {
-            dataField: 'company_symbol',
-            text: 'Company Name',            
+            dataField: 'market_symbol',
+            text: 'Market Symbol',            
             sort: true,
             sortCaret
         }, {
-            dataField: 'pricetarget',
-            text: 'Price Target',
+            dataField: 'company_name',
+            text: 'Company Name',
             sort: true,
             sortCaret,
             ...buildCustomNumberFilter({
@@ -183,13 +184,23 @@ export class AdvancedTableA extends React.Component {
                 getFilter: filter => { this.priceFilter = filter; }
             })
         }, {
-            dataField: 'title',
-            text: 'Title',
+            dataField: 'consensus_price_target',
+            text: 'Consensus Price Target',
             sort: true,
             sortCaret
+        }, 
+        {
+            dataField: 'consensus_rating',
+            text: 'Consensus Rating',
+            sort: true,
+            sortCaret,
+            ...buildCustomNumberFilter({
+                comparators: [Comparator.EQ, Comparator.GT, Comparator.LT],
+                getFilter: filter => { this.priceFilter = filter; }
+            })
         }, {
-            dataField: 'created_at',
-            text: 'Created',
+            dataField: 'updated_at',
+            text: 'Update Date',
             formatter: (cell) =>
                 moment(cell).format('DD/MM/YYYY'),
             filter: dateFilter({

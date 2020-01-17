@@ -36,18 +36,18 @@ const secret = 'mysecretsshhh';
 //For File Upload
 const DIR = './public/';
 
-// var connection = mysql.createConnection({
-//   host     : 'localhost',
-//   user     : 'root',
-//   password : 'test1234',
-//   database : 'myapp'
-// });
 var connection = mysql.createConnection({
-  host     : 'remotemysql.com',
-  user     : 'DoXfd29drf',
-  password : 'ASsCHoibhp',
-  database : 'DoXfd29drf'
+  host     : 'localhost',
+  user     : 'root',
+  password : 'test1234',
+  database : 'myapp'
 });
+// var connection = mysql.createConnection({
+//   host     : 'remotemysql.com',
+//   user     : 'DoXfd29drf',
+//   password : 'ASsCHoibhp',
+//   database : 'DoXfd29drf'
+// });
 
 app.use( bodyParser.json() );       // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
@@ -97,9 +97,9 @@ app.use(function(req, res, next) {
 //##########################
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname+'/frontend/build/index.html'));
-});
+// app.get('*', (req, res) => {
+//   res.sendFile(path.join(__dirname+'/frontend/build/index.html'));
+// });
 //############################
 
 

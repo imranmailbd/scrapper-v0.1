@@ -3,6 +3,7 @@ const axios = require("axios");
 const hpq = require('hpq');
 
 const siteUrl = "https://www.marketbeat.com/stocks/directory/";
+//const siteUrl = "https://www.m";
 
 let siteRawData = "";
 
@@ -13,6 +14,7 @@ const fetchDataApi = async (postfx) => {
   //console.log('this is:');
   //console.log(siteUrl+postfx);
   const result = await axios.get(siteUrl+postfx);
+  //console.log(result.data.Error);
   return cheerio.load(result.data);
 };
 
@@ -23,7 +25,8 @@ const getResultsApi = async (url_postfix) => {
 
   const $ = await fetchDataApi(postfx);
 
-
+  //console.log($("tr").);
+  //console.log($);
   //################################################
   //siteName = $('.top > .action-post-job').text();
   $("tr").each(function(i, element) {
